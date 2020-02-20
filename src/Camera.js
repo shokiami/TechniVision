@@ -1,46 +1,33 @@
 import React, {Component} from 'react';
-import {
-  AppRegistry,
-  View,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
+import {View, TouchableOpacity, StatusBar} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-
-import styles from './Styles/CameraStyles';
 import RecordButton from './RecordButton';
+import styles from './Styles';
 
 const defaultColor = "#ffffff";
 const redColor = "#eb2821";
 
 export default class Camera extends Component {
   state = {
-      cameraFace: RNCamera.Constants.Type.back,
-      isRecording: false,
-      options: {quality: RNCamera.Constants.VideoQuality["288p"]}
+    cameraFace: RNCamera.Constants.Type.back,
+    isRecording: false,
+    options: {
+      quality: RNCamera.Constants.VideoQuality["288p"]
+    }
   };
-  
-  constructor(props) {
-    super(props);
-  }
 
-  toggleRecording = () => {
+  async toggleRecording() {
     if (this.state.isRecording) {
       this.stopRecording();
     } else {
-      this.startRecording();
+      await this.startRecording();
     }
-  };
+  }
 
   async startRecording() {
-    try {
-      this.camera.refreshAuthorizationStatus;
-      this.setState({isRecording: true});
-      var data = await this.camera.recordAsync(this.state.options);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
+    this.setState({isRecording: true});
+    var data = await this.camera.recordAsync(this.state.options);
+    console.log(data.uri);
   }
 
   stopRecording() {
@@ -48,13 +35,12 @@ export default class Camera extends Component {
     this.camera.stopRecording();
   }
 
-  render = () => {
-    console.log(this.state);
+  render() {
     return (
       <View style={styles.container}>
         <RNCamera
-          ref={ref => {
-            this.camera = ref;
+          ref={cam => {
+            this.camera = cam;
           }}
           style={styles.preview}
           type={this.state.cameraFace}
@@ -67,7 +53,7 @@ export default class Camera extends Component {
           captureAudio = {false}
         >
           <View>
-            <TouchableOpacity onPress={this.toggleRecording} activeOpacity={1}>
+            <TouchableOpacity onPress={this.toggleRecording.bind(this)} activeOpacity={1}>
                 <RecordButton recording={this.state.isRecording}/>
             </TouchableOpacity>
           </View>
@@ -77,5 +63,3 @@ export default class Camera extends Component {
     );
   }
 }
-
-AppRegistry.registerComponent('Camera', () => Camera);
