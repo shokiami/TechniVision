@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, StatusBar, Text} from 'react-native';
+import {View, TouchableOpacity, StatusBar} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import RNVideo from 'react-native-video';
 import RecordButton from './RecordButton';
 import styles from './Styles';
-import Video from 'react-native-video';
 
 const defaultColor = "#ffffff";
 const redColor = "#eb2821";
@@ -19,8 +19,6 @@ export default class Camera extends Component {
   };
   
   async toggleRecording() {
-    console.log(RNCamera.Constants.VideoQuality);
-    console.log(this.state.options);
     if (this.state.isRecording) {
       this.stopRecording();
     } else {
@@ -45,15 +43,6 @@ export default class Camera extends Component {
     this.camera.stopRecording();
   }
   
-  onBuffer() {
-    
-  }
-  
-  videoError() {
-    
-  }
-  
-
   render() {
     if (this.state.fileUri == null) {
       return (
@@ -84,7 +73,7 @@ export default class Camera extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <Video source={{uri: this.state.fileUri}}
+          <RNVideo source={{uri: this.state.fileUri}}
           ref={ref => {
             this.playback = ref;
           }}
