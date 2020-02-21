@@ -83,10 +83,17 @@ export default class Camera extends Component {
       );
     } else {
       return (
-        <Video source={{uri: this.state.fileUri}}
-           repeat
-           resizeMode = "stretch"
-           style={styles.backgroundVideo} />
+        <View style={styles.container}>
+          <Video source={{uri: this.state.fileUri}}
+          ref={ref => {
+            this.playback = ref;
+          }}
+          resizeMode = "stretch"
+          onEnd = {() => {
+            this.setState({fileUri: null})
+          }}
+          style={styles.backgroundVideo} />
+        </View>
       );
     }
   }
