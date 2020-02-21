@@ -32,7 +32,7 @@ export default StyleSheet.create({
 
     //RecordButton.js
     recordButton: {
-        width: 100, 
+        width: 100,
         height: 100
     },
 
@@ -46,5 +46,12 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center'
-    }
+    },
+    backgroundVideo: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      bottom: 0,
+      right: 0,
+    },
 });
