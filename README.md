@@ -1,5 +1,5 @@
 # TechniVision
-Steps to run: 
+Steps to run:  
 git clone https://github.com/shokiami/TechniVision.git
 cd TechniVision
 npm i
