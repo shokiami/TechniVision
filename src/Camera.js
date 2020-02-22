@@ -18,28 +18,22 @@ export default class Camera extends Component {
     }
   };
   
-  async toggleRecording() {
+  toggleRecording() {
     if (this.state.isRecording) {
       this.stopRecording();
     } else {
-      await this.startRecording();
+      this.startRecording();
     }
   }
   
   async startRecording() {
-    this.setState({
-      isRecording: true,
-      options: {
-        quality: RNCamera.Constants.VideoQuality["480p"]
-      }
-    });
-    var data = await this.camera.recordAsync(this.state.options);
-    this.setState({fileUri: data.uri});
+    this.setState({isRecording: true, options: {quality: RNCamera.Constants.VideoQuality["480p"]}});
+    const data = await this.camera.recordAsync(this.state.options);
+    this.setState({isRecording: false, fileUri: data.uri});
     console.log(data.uri);
   }
 
   stopRecording() {
-    this.setState({isRecording: false})
     this.camera.stopRecording();
   }
   
