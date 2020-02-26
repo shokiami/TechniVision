@@ -12,10 +12,7 @@ export default class Camera extends Component {
   state = {
     cameraFace: RNCamera.Constants.Type.back,
     isRecording: false,
-    fileUri: null,
-    options: {
-      quality: RNCamera.Constants.VideoQuality["480p"]
-    }
+    fileUri: null
   };
   
   toggleRecording() {
@@ -27,8 +24,8 @@ export default class Camera extends Component {
   }
   
   async startRecording() {
-    this.setState({isRecording: true, options: {quality: RNCamera.Constants.VideoQuality["480p"]}});
-    const data = await this.camera.recordAsync(this.state.options);
+    this.setState({isRecording: true});
+    const data = await this.camera.recordAsync({quality: RNCamera.Constants.VideoQuality["480p"]});
     this.setState({isRecording: false, fileUri: data.uri});
     console.log(data.uri);
   }
@@ -54,6 +51,7 @@ export default class Camera extends Component {
               buttonNegative: 'Cancel',
             }}
             captureAudio = {false}
+            ratio = {"16:9"}
           >
             <View>
               <TouchableOpacity onPress={this.toggleRecording.bind(this)} activeOpacity={1}>
