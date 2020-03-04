@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-camera": "^3.18.0",
+    "react-native-camera": "^3.19.0",
     "react-native-check-box": "^2.1.7",
     "react-native-popup-dialog": "^0.18.3",
     "react-native-video": "^5.0.2"
