@@ -3,8 +3,8 @@ import MainApp from './src/MainApp';
 
 export default class App extends Component {
 	render() {
-        return (
-            <MainApp/>
-        );
-    }
+    return (
+      <MainApp/>
+    );
+  }
 }

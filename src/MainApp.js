@@ -3,8 +3,8 @@ import PoseNet from './PoseNet';
 
 export default class MainApp extends Component {
 	render() {
-        return (
-            <PoseNet/>
-        );
-    }
+    return (
+      <PoseNet/>
+    );
+  }
 }
