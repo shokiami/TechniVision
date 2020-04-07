@@ -15,7 +15,8 @@ export default StyleSheet.create({
     position: 'relative',
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex:0
   },
   canvas: {
     position: 'absolute'
