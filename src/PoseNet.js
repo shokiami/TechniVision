@@ -6,6 +6,7 @@ import {Camera} from 'expo-camera';
 import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
 import * as posenet from '@tensorflow-models/posenet';
 import styles from './Styles';
+import Skeleton from './Skeleton';
 
 const TensorCamera = cameraWithTensors(Camera);
 var model;
@@ -61,6 +62,7 @@ export default class Posenet extends Component {
     } else {
       return (
         <View style={styles.container}>
+          <Skeleton/>
           <TensorCamera
             style={styles.camera}
             type={this.state.type}
