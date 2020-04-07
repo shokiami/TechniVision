@@ -32,7 +32,7 @@ export default class App extends Component {
   handleCameraStream(images, updatePreview, gl) {
     const loop = async () => {
       const nextImageTensor = images.next().value
-
+      console.log(nextImageTensor);
       //
       // do something with tensor here
       //
@@ -41,7 +41,7 @@ export default class App extends Component {
       // updatePreview();
       // gl.endFrameEXP();
 
-      requestAnimation(loop);
+      requestAnimationFrame(loop);
     }
     loop();
   }
@@ -104,4 +104,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center'
   }
-});  
+});
