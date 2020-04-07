@@ -9,7 +9,6 @@ import styles from './Styles';
 
 const TensorCamera = cameraWithTensors(Camera);
 var model;
-var pose = null;
 
 export default class Posenet extends Component {
     state = {
@@ -19,6 +18,7 @@ export default class Posenet extends Component {
     };
 
     async componentDidMount() {
+        this.handleCameraStream = this.handleCameraStream.bind(this)
         //Ask for camera permission
         const permission = await Camera.requestPermissionsAsync();
         this.setState({permission: (permission.status == 'granted')});
@@ -27,15 +27,14 @@ export default class Posenet extends Component {
         model = await posenet.load();
         this.setState({loaded: true});
     }
-
+    
     handleCameraStream(images, updatePreview, gl) {
-        const loop = async () => {
+        var loop = async () => {
             const nextImageTensor = images.next().value;
             //Apply posenet to nextImageTensor
             pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
-            //this.setState({pose: pose});
-
-            requestAnimationFrame(loop);
+            this.setState({pose:pose});
+            requestAnimationFrame(loop);//.bind(this));
         }
         loop();
     }
@@ -73,14 +72,13 @@ export default class Posenet extends Component {
                         onReady={this.handleCameraStream}
                         autorender={true}
                     />
-                    { pose != null ? <>
-                      <Text>total score:</Text>
+                    { this.state.pose != null ? <View>
+                      <Text>total score:</Text><Text>{this.state.pose.score}</Text>
                       <FlatList>
-                        data={pose.keypoints}
+                        data={this.state.pose.keypoints}
                         renderItem={({item}) => <Text>{item.part} x:{item.position.x} y:{item.position.y} score:{item.score}</Text>}
                       </FlatList>
-                      </>
-                    : <Text>no pose data</Text>}
+                    </View> : <Text>no pose data</Text>}
                 </View>
             );
         }
