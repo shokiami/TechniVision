@@ -35,7 +35,7 @@ export default class Posenet extends Component {
       const nextImageTensor = images.next().value;
       //Apply posenet to nextImageTensor
       pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
-      this.setState({pose:pose});
+      this.setState({pose: pose});
       requestAnimationFrame(loop); //.bind(this));
     }
     loop();
