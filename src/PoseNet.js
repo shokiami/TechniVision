@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import {Camera} from 'expo-camera';
@@ -9,6 +9,7 @@ import styles from './Styles';
 
 const TensorCamera = cameraWithTensors(Camera);
 var model;
+var pose = null;
 
 export default class Posenet extends Component {
     state = {
@@ -31,8 +32,8 @@ export default class Posenet extends Component {
         const loop = async () => {
             const nextImageTensor = images.next().value;
             //Apply posenet to nextImageTensor
-            const pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
-            console.log(pose);
+            pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
+            //this.setState({pose: pose});
 
             requestAnimationFrame(loop);
         }
@@ -72,6 +73,14 @@ export default class Posenet extends Component {
                         onReady={this.handleCameraStream}
                         autorender={true}
                     />
+                    { pose != null ? <>
+                      <Text>total score:</Text>
+                      <FlatList>
+                        data={pose.keypoints}
+                        renderItem={({item}) => <Text>{item.part} x:{item.position.x} y:{item.position.y} score:{item.score}</Text>}
+                      </FlatList>
+                      </>
+                    : <Text>no pose data</Text>}
                 </View>
             );
         }
