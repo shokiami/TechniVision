@@ -5,8 +5,8 @@ import '@tensorflow/tfjs-react-native';
 import {Camera} from 'expo-camera';
 import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
 import * as posenet from '@tensorflow-models/posenet';
-import styles from './Styles';
 import Skeleton from './Skeleton';
+import styles from './Styles';
 
 const TensorCamera = cameraWithTensors(Camera);
 var model;
@@ -15,7 +15,8 @@ export default class Posenet extends Component {
   state = {
     loaded: false,
     permission: false,
-    type: Camera.Constants.Type.front
+    type: Camera.Constants.Type.front,
+    pose: null
   };
 
   async componentDidMount() {
@@ -35,7 +36,7 @@ export default class Posenet extends Component {
       //Apply posenet to nextImageTensor
       pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
       this.setState({pose:pose});
-      requestAnimationFrame(loop);//.bind(this));
+      requestAnimationFrame(loop); //.bind(this));
     }
     loop();
   }
@@ -73,7 +74,7 @@ export default class Posenet extends Component {
             onReady={this.handleCameraStream}
             autorender={true}
           />
-            <Skeleton pose={this.state.pose}/>
+          <Skeleton pose={this.state.pose}/>
         </View>
       );
     }
