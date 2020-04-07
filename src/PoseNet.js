@@ -18,8 +18,10 @@ export default class Posenet extends Component {
     };
 
     async componentDidMount() {
+        //Ask for camera permission
         const permission = await Camera.requestPermissionsAsync();
         this.setState({permission: (permission.status == 'granted')});
+        //Load TensorFlow and PoseNet
         await tf.ready();
         model = await posenet.load();
         this.setState({loaded: true});
