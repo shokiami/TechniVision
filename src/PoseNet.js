@@ -20,7 +20,8 @@ export default class Posenet extends Component {
   };
 
   async componentDidMount() {
-    this.handleCameraStream = this.handleCameraStream.bind(this)
+    //Set up functions
+    this.handleCameraStream = this.handleCameraStream.bind(this);
     //Ask for camera permission
     const permission = await Camera.requestPermissionsAsync();
     this.setState({permission: (permission.status == 'granted')});
@@ -36,7 +37,7 @@ export default class Posenet extends Component {
       //Apply posenet to nextImageTensor
       pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
       this.setState({pose: pose});
-      requestAnimationFrame(loop); //.bind(this));
+      requestAnimationFrame(loop); //.bind(this);
     }
     loop();
   }

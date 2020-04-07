@@ -12,7 +12,7 @@ export default class Skeleton extends Component {
       var texts = []
       for (let i = 0; i < pose.keypoints.length; i ++) {
         const style = {
-          position: 'absolute', left: pose.keypoints[i].position.x*3.4, top: pose.keypoints[i].position.y*4.9, color: 'red'
+          position: 'absolute', left: pose.keypoints[i].position.x*2.7, top: pose.keypoints[i].position.y*4.1, color: 'red'
         };
         if (pose.keypoints[i].score > 0.3) {
           texts.push( <Text style={style} key={i}>{pose.keypoints[i].part + " \nscore:" + Math.round(pose.keypoints[i].score*1000)/1000.0}</Text> );
