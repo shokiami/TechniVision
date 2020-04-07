@@ -62,7 +62,6 @@ export default class Posenet extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <Skeleton/>
           <TensorCamera
             style={styles.camera}
             type={this.state.type}
@@ -74,13 +73,7 @@ export default class Posenet extends Component {
             onReady={this.handleCameraStream}
             autorender={true}
           />
-          {this.state.pose != null ? <View>
-            <Text>total score:</Text><Text>{this.state.pose.score}</Text>
-            <FlatList>
-              data={this.state.pose.keypoints}
-              renderItem={({item}) => <Text>{item.part} x:{item.position.x} y:{item.position.y} score:{item.score}</Text>}
-            </FlatList>
-          </View> : <Text>no pose data</Text>}
+            <Skeleton pose={this.state.pose}/>
         </View>
       );
     }
