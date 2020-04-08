@@ -4,25 +4,21 @@ import Canvas from 'react-native-canvas';
 import styles from './Styles';
  
 export default class Skeleton extends Component {
+  drawPose(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'purple';
+    ctx.fillRect(0, 0, 100, 100);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(100, 100, 200, 300);
+  }
   
-
   render() {
     if (this.props.pose != null) {
-      const pose = this.props.pose;
-      var texts = []
-      for (let i = 0; i < pose.keypoints.length; i ++) {
-        const style = {
-          position: 'absolute', left: pose.keypoints[i].position.x*0.95 + "%", top: pose.keypoints[i].position.y*0.75 + "%", color: 'red'
-        };
-        if (pose.keypoints[i].score > 0.4) {
-          texts.push( <Text style={style} key={i}>{pose.keypoints[i].part + " \nscore:" + Math.round(pose.keypoints[i].score*1000)/1000.0}</Text> );
-        }
-      }
+      this.pose = this.props.pose;
       return (
         <View style={{position: 'absolute', zIndex: 10, top:0, bottom:0, left:0, right:0}}>
-          <Text>score:</Text>
-          <Text>{pose.score}</Text>
-          <>{texts}</>
+          <Text style={{position: 'absolute', bottom:0, color: (this.pose.score>0.5) ? 'green' : 'red'}}>{"Total Score: \n" + this.pose.score}</Text>
+          <Canvas ref={this.drawPose}/>
         </View>
       )
     } else {
