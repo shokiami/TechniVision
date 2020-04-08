@@ -2,31 +2,33 @@ import React, { Component } from 'react';
 import {View, Text} from 'react-native';
 import Canvas from 'react-native-canvas';
 import styles from './Styles';
- 
+
+var pose;
+
 export default class Skeleton extends Component {
-  drawPose(canvas) {
+  drawSkeleton(canvas) {
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = 'purple';
-    ctx.fillRect(0, 0, 100, 100);
-    ctx.fillStyle = 'red';
-    ctx.fillRect(100, 100, 200, 300);
+    console.log('hi');
+    //ctx.fillRect(0, 0, 100*pose.score, 100*pose.score);
   }
   
   render() {
-    if (this.props.pose != null) {
-      this.pose = this.props.pose;
+    if (this.props.pose == null) {
       return (
-        <View style={{position: 'absolute', zIndex: 10, top:0, bottom:0, left:0, right:0}}>
-          <Text style={{position: 'absolute', bottom:0, color: (this.pose.score>0.5) ? 'green' : 'red'}}>{"Total Score: \n" + this.pose.score}</Text>
-          <Canvas ref={this.drawPose}/>
+        <View style={styles.canvas}>
+          <View style={styles.text}>
+            <Text>Awaiting PoseNet...</Text>
+          </View>
         </View>
-      )
+      );
     } else {
+      pose = this.props.pose;
       return (
-        <View style={styles.container}>
-          <Text>no pose passed in</Text>
+        <View style={styles.canvas}>
+          <Canvas ref={this.drawSkeleton}/>
         </View>
-      )
+      );
     }
   }
 }

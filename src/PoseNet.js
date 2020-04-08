@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text} from 'react-native';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import {Camera} from 'expo-camera';
@@ -8,7 +8,7 @@ import * as posenet from '@tensorflow-models/posenet';
 import Skeleton from './Skeleton';
 import styles from './Styles';
 
-const TensorCamera = cameraWithTensors(Camera);
+var TensorCamera;
 var model;
 
 export default class Posenet extends Component {
@@ -17,9 +17,8 @@ export default class Posenet extends Component {
     permission: false,
     type: Camera.Constants.Type.front,
     pose: null
-  };
+  }
   
-
   async componentDidMount() {
     //Set up functions
     this.mounted = true;
@@ -29,6 +28,7 @@ export default class Posenet extends Component {
     this.setState({permission: (permission.status == 'granted')});
     //Load TensorFlow and PoseNet
     await tf.ready();
+    TensorCamera = cameraWithTensors(Camera);
     model = await posenet.load();
     this.setState({loaded: true});
   }
@@ -37,12 +37,12 @@ export default class Posenet extends Component {
     this.mounted = false;
   }
   
-  handleCameraStream(images, updatePreview, gl) {
+  handleCameraStream(images) {
     var loop = async () => {
       const nextImageTensor = images.next().value;
       if (this.mounted) {
         //Apply posenet to nextImageTensor
-        pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
+        let pose = await model.estimateSinglePose(nextImageTensor);
         this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
       }
@@ -60,7 +60,7 @@ export default class Posenet extends Component {
     if (!this.state.permission) {
       return (
         <View style={styles.text}>
-          <Text>Camera permission denied.</Text>
+          <Text>Camera permission denied...</Text>
         </View>
       );
     } else if (!this.state.loaded) {
@@ -83,7 +83,7 @@ export default class Posenet extends Component {
             onReady={this.handleCameraStream}
             autorender={true}
           />
-            <Skeleton pose={this.state.pose}/>
+          <Skeleton pose={this.state.pose}/>
         </View>
       );
     }
