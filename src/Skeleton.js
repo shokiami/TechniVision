@@ -18,6 +18,7 @@ export default class Skeleton extends Component {
         if (canvas != null) {
           const ctx = canvas.getContext('2d');
           var pose = this.props.pose;
+          ctx.clearRect(0,0,100,100);
           ctx.fillStyle = 'purple';
           ctx.fillRect(0, 0, 100 * pose.score, 100 * pose.score);
         }
