@@ -5,9 +5,8 @@ import styles from './Styles';
 
 export default class Skeleton extends Component {
   drawSkeleton(pose, ctx) {
-    ctx.clearRect(0,0,100,100);
     ctx.fillStyle = 'purple';
-    ctx.fillRect(0, 0, 100 * pose.score, 100 * pose.score);
+    ctx.fillRect(0, 0, 10, 100);
   }
   
   render() {
@@ -23,6 +22,7 @@ export default class Skeleton extends Component {
       const handleCanvas = (canvas) => {
         if (canvas != null) {
           const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
           this.drawSkeleton(this.props.pose, ctx);
         }
       }
