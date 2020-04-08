@@ -4,6 +4,12 @@ import Canvas from 'react-native-canvas';
 import styles from './Styles';
 
 export default class Skeleton extends Component {
+  drawSkeleton(pose, ctx) {
+    ctx.clearRect(0,0,100,100);
+    ctx.fillStyle = 'purple';
+    ctx.fillRect(0, 0, 100 * pose.score, 100 * pose.score);
+  }
+  
   render() {
     if (this.props.pose == null) {
       return (
@@ -14,18 +20,15 @@ export default class Skeleton extends Component {
         </View>
       );
     } else {
-      const drawSkeleton = (canvas) => {
+      const handleCanvas = (canvas) => {
         if (canvas != null) {
           const ctx = canvas.getContext('2d');
-          var pose = this.props.pose;
-          ctx.clearRect(0,0,100,100);
-          ctx.fillStyle = 'purple';
-          ctx.fillRect(0, 0, 100 * pose.score, 100 * pose.score);
+          this.drawSkeleton(this.props.pose, ctx);
         }
       }
       return (
         <View style={styles.canvas}>
-          <Canvas ref={drawSkeleton}/>
+          <Canvas ref={handleCanvas}/>
         </View>
       );
     }
