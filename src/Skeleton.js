@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
 import {View, Text} from 'react-native';
-import Canvas from 'react-native-canvas';
 import styles from './Styles';
+import Svg, {
+  Circle,
+  Polygon,
+  Polyline,
+  Line,
+} from 'react-native-svg';
 
 export default class Skeleton extends Component {
-  drawSkeleton(pose, ctx) {
-    ctx.fillStyle = 'purple';
-    ctx.fillRect(0, 0, 10, 100);
+  drawSkeleton(pose) {
+    objs = []
+    for (let i = 0; i < pose.keypoints.length; i ++) {
+      const key = pose.keypoints[i];
+      if (key.part == 'nose') {
+         objs.push(<Circle key={i} r="5" cx={key.position.x + "%"} cy={key.position.y*0.65 + "%"} fill='red'/>);
+      }
+    }
+    return (
+      <>
+      <Text>score:</Text>
+      <Text>{pose.score}</Text>
+        <Svg height="100%" width="100%" viewbox="0 0 100 100">
+          {objs}
+        </Svg>
+      </>
+    );
   }
   
   render() {
@@ -19,16 +38,10 @@ export default class Skeleton extends Component {
         </View>
       );
     } else {
-      const handleCanvas = (canvas) => {
-        if (canvas != null) {
-          const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          this.drawSkeleton(this.props.pose, ctx);
-        }
-      }
+      pose = this.props.pose;
       return (
         <View style={styles.canvas}>
-          <Canvas ref={handleCanvas}/>
+          {this.drawSkeleton(pose)}
         </View>
       );
     }
