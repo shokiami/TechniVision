@@ -18,9 +18,11 @@ export default class Posenet extends Component {
     type: Camera.Constants.Type.front,
     pose: null
   };
+  
 
   async componentDidMount() {
     //Set up functions
+    this.mounted = true;
     this.handleCameraStream = this.handleCameraStream.bind(this);
     //Ask for camera permission
     const permission = await Camera.requestPermissionsAsync();
@@ -31,13 +33,19 @@ export default class Posenet extends Component {
     this.setState({loaded: true});
   }
   
+  async componentWillUnmount() {
+    this.mounted = false;
+  }
+  
   handleCameraStream(images, updatePreview, gl) {
     var loop = async () => {
       const nextImageTensor = images.next().value;
-      //Apply posenet to nextImageTensor
-      pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
-      this.setState({pose: pose});
-      requestAnimationFrame(loop); //.bind(this);
+      if (this.mounted) {
+        //Apply posenet to nextImageTensor
+        pose = await model.estimateSinglePose(nextImageTensor, 0.5, false, 16);
+        this.setState({pose: pose});
+        requestAnimationFrame(loop); //.bind(this);
+      }
     }
     loop();
   }
@@ -75,7 +83,7 @@ export default class Posenet extends Component {
             onReady={this.handleCameraStream}
             autorender={true}
           />
-          <Skeleton pose={this.state.pose}/>
+            <Skeleton pose={this.state.pose}/>
         </View>
       );
     }
