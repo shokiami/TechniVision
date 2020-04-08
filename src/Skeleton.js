@@ -1,33 +1,47 @@
 import React, { Component } from 'react';
 import {View, Text} from 'react-native';
 import styles from './Styles';
-import Svg, {
-  Circle,
-  Polygon,
-  Polyline,
-  Line,
-} from 'react-native-svg';
+import Svg, {Circle, Line} from 'react-native-svg';
 
 export default class Skeleton extends Component {
   drawSkeleton(pose) {
-    objs = []
-    for (let i = 0; i < pose.keypoints.length; i ++) {
-      const key = pose.keypoints[i];
-      if (key.part == 'nose') {
-         objs.push(<Circle key={i} r="5" cx={key.position.x + "%"} cy={key.position.y*0.65 + "%"} fill='red'/>);
-      }
+    const point = (part) => {
+      return(
+        <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={0.75 * pose.keypoints[part].position.y + '%'} fill='blue'/>
+      );
     }
-    return (
-      <>
-      <Text>score:</Text>
-      <Text>{pose.score}</Text>
-        <Svg height="100%" width="100%" viewbox="0 0 100 100">
-          {objs}
-        </Svg>
-      </>
-    );
+    const line = (part1, part2) => {
+      return(
+        <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={0.75 * pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={0.75 * pose.keypoints[part2].position.y + '%'} stroke='blue'/>
+      );
+    }
+    return ([
+      //Face
+      point(0),
+      point(1),
+      point(2),
+      point(3),
+      point(4),
+      //Torso
+      line(5,6),
+      line(5,11),
+      line(6,12),
+      line(11,12),
+      //Left arm
+      line(5,7),
+      line(7,9),
+      //Right arm
+      line(6,8),
+      line(8,10),
+      //Left leg
+      line(11,13),
+      line(13,15),
+      //Right leg
+      line(12,14),
+      line(14,16),
+    ]);
   }
-  
+
   render() {
     if (this.props.pose == null) {
       return (
@@ -41,7 +55,9 @@ export default class Skeleton extends Component {
       pose = this.props.pose;
       return (
         <View style={styles.canvas}>
-          {this.drawSkeleton(pose)}
+          <Svg height="100%" width="100%" viewbox="0 0 100 100">
+            {this.drawSkeleton(pose)}
+          </Svg>
         </View>
       );
     }
