@@ -7,9 +7,9 @@ var pose;
 
 export default class Skeleton extends Component {
   drawSkeleton(canvas) {
-    console.log('hi');
-    // const ctx = canvas.getContext('2d');
-    // ctx.fillStyle = 'purple';
+    console.log('bruh');
+    //const ctx = canvas.getContext('2d');
+    //ctx.fillStyle = 'purple';
     //ctx.fillRect(0, 0, 100*pose.score, 100*pose.score);
   }
   
