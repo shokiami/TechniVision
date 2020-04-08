@@ -34,12 +34,13 @@ export default class Posenet extends Component {
   }
   
   async componentWillUnmount() {
+    console.log("unmounting");
     this.mounted = false;
   }
   
   handleCameraStream(images) {
     var loop = async () => {
-      const nextImageTensor = images.next().value;
+      const nextImageTensor = images.next().value; 
       if (this.mounted) {
         //Apply posenet to nextImageTensor
         let pose = await model.estimateSinglePose(nextImageTensor);
