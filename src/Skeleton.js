@@ -6,12 +6,6 @@ import styles from './Styles';
 var pose;
 
 export default class Skeleton extends Component {
-  drawSkeleton(canvas) {
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'purple';
-    console.log('hi');
-    //ctx.fillRect(0, 0, 100*pose.score, 100*pose.score);
-  }
   
   render() {
     if (this.props.pose == null) {
@@ -24,9 +18,17 @@ export default class Skeleton extends Component {
       );
     } else {
       pose = this.props.pose;
+      const drawSkeleton = (canvas) => {
+        if (canvas != null) {
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = 'purple';
+          console.log('hi');
+          //ctx.fillRect(0, 0, 100*pose.score, 100*pose.score);
+        }
+      }
       return (
         <View style={styles.canvas}>
-          <Canvas ref={this.drawSkeleton}/>
+          <Canvas ref={drawSkeleton}/>
         </View>
       );
     }
