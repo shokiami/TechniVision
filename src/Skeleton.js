@@ -5,15 +5,20 @@ import Svg, {Circle, Line} from 'react-native-svg';
 
 export default class Skeleton extends Component {
   drawSkeleton(pose) {
+    var minScore = 0.2;
     const point = (part) => {
-      return(
-        <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={0.75 * pose.keypoints[part].position.y + '%'} fill='blue'/>
-      );
+      if (pose.keypoints[part].score > minScore) {
+        return(
+          <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={0.75 * pose.keypoints[part].position.y + '%'} fill='blue'/>
+        );
+      }
     }
     const line = (part1, part2) => {
-      return(
-        <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={0.75 * pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={0.75 * pose.keypoints[part2].position.y + '%'} stroke='blue'/>
-      );
+      if (pose.keypoints[part1].score > minScore && pose.keypoints[part2].score > minScore) {
+        return(
+          <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={0.75 * pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={0.75 * pose.keypoints[part2].position.y + '%'} stroke='blue'/>
+        );
+      }
     }
     return ([
       //Face
