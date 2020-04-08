@@ -5,7 +5,7 @@ import Svg, {Circle, Line} from 'react-native-svg';
 
 export default class Skeleton extends Component {
   drawSkeleton(pose) {
-    var minScore = 0.2;
+    var minScore = 0.3;
     const point = (part) => {
       if (pose.keypoints[part].score > minScore) {
         return(
