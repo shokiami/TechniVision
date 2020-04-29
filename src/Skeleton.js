@@ -9,14 +9,14 @@ export default class Skeleton extends Component {
     const point = (part) => {
       if (pose.keypoints[part].score > minScore) {
         return(
-          <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={0.75 * pose.keypoints[part].position.y + '%'} fill='blue'/>
+          <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={pose.keypoints[part].position.y + '%'} fill='blue'/>
         );
       }
     }
     const line = (part1, part2) => {
       if (pose.keypoints[part1].score > minScore && pose.keypoints[part2].score > minScore) {
         return(
-          <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={0.75 * pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={0.75 * pose.keypoints[part2].position.y + '%'} stroke='blue'/>
+          <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={pose.keypoints[part2].position.y + '%'} stroke='blue'/>
         );
       }
     }
