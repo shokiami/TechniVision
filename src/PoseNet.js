@@ -32,7 +32,7 @@ export default class Posenet extends Component {
     model = await posenet.load({
       architecture: 'MobileNetV1',
       outputStride: 16,
-      inputResolution: {width: 640, height: 480},
+      inputResolution: {width: 400, height: 400},
       multiplier: 0.5
     });
     this.setState({loaded: true});
@@ -89,7 +89,7 @@ export default class Posenet extends Component {
             type={this.state.type}
             cameraTextureHeight={textureDims.height}
             cameraTextureWidth={textureDims.width}
-            resizeHeight={200}
+            resizeHeight={152}
             resizeWidth={152}
             resizeDepth={3}
             onReady={this.handleCameraStream}
