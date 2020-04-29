@@ -32,7 +32,7 @@ export default class Posenet extends Component {
     model = await posenet.load({
       architecture: 'MobileNetV1',
       outputStride: 16,
-      inputResolution: {width: 400, height: 400},
+      inputResolution: {width: 320, height: 568},
       multiplier: 0.5
     });
     this.setState({loaded: true});
