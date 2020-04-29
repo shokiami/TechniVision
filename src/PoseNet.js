@@ -29,7 +29,12 @@ export default class Posenet extends Component {
     //Load TensorFlow and PoseNet
     await tf.ready();
     TensorCamera = cameraWithTensors(Camera);
-    model = await posenet.load();
+    model = await posenet.load({
+      architecture: 'MobileNetV1',
+      outputStride: 16,
+      inputResolution: {width: 640, height: 480},
+      multiplier: 0.5
+    });
     this.setState({loaded: true});
   }
   
@@ -43,7 +48,13 @@ export default class Posenet extends Component {
       const nextImageTensor = images.next().value; 
       if (this.mounted) {
         //Apply posenet to nextImageTensor
-        let pose = await model.estimateSinglePose(nextImageTensor);
+        let cameraFlip;
+        if (Platform.OS === 'ios') {
+          cameraFlip = false;
+        } else {
+          cameraFlip = true;
+        }
+        let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
         this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
       }
