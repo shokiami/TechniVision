@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import {Camera} from 'expo-camera';
-import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
+import {cameraWithTensors, bundleResourceIO} from '@tensorflow/tfjs-react-native';
 import * as posenet from '@tensorflow-models/posenet';
 import Skeleton from './Skeleton';
 import styles from './Styles';
@@ -29,12 +29,13 @@ export default class Posenet extends Component {
     //Load TensorFlow and PoseNet
     await tf.ready();
     TensorCamera = cameraWithTensors(Camera);
-    model = await posenet.load({
-      architecture: 'MobileNetV1',
-      outputStride: 16,
-      inputResolution: {width: 320, height: 568},
-      multiplier: 0.5
-    });
+    model = await tf.loadLayersModel(bundleResourceIO(require("./test-model/model.json"), require("./test-model/model.bin")));
+    // model = await posenet.load({
+    //   architecture: 'MobileNetV1',
+    //   outputStride: 16,
+    //   inputResolution: {width: 320, height: 568},
+    //   multiplier: 0.5
+    // });
     this.setState({loaded: true});
   }
   
@@ -54,8 +55,9 @@ export default class Posenet extends Component {
         } else {
           cameraFlip = true;
         }
-        let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
-        this.setState({pose: pose});
+        let pose = model.predict(nextImageTensor);
+        //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
+        //this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
       }
     }
