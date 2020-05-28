@@ -1,6 +1,6 @@
-
+// Change 1 (import the blacklist utility)
 const blacklist = require('metro-config/src/defaults/blacklist');
-
+ 
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({

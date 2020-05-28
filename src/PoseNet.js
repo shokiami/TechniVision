@@ -58,13 +58,9 @@ export default class Posenet extends Component {
         } else {
           cameraFlip = true;
         }
-        const prediction = model.predict(nextImageTensor);
-        console.log(prediction);
-        
-        
-        
+        let pose = model.predict(nextImageTensor);
         //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
-        this.setState({pose: pose});
+        //this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
       }
     }
