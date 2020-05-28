@@ -57,16 +57,13 @@ export default class Posenet extends Component {
           "right_toe", "right_midfoot", "right_heel", "left_toe", "left_midfoot", "left_heel"
         ];
         var pose = {}
-        for (let keypoint = 0; keypoint < 24; keypoint ++) {
+        for (let keypoint = 0; keypoint < names.length; keypoint ++) {
           var layer = await output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze().array();
-          //console.log(layer);
-          //continue;
           var max_confidence = 0;
           var x = 0;
           var y = 0;
           for (let i = 0; i < xsize/8; i ++) {
             for (let j = 0; j < ysize/8; j ++) {
-              console.log(layer[i][j] + ", " + max_confidence );
               if (layer[i][j] > max_confidence) {
                 x = i;
                 y = j;
@@ -76,7 +73,7 @@ export default class Posenet extends Component {
           }
           pose[names[keypoint]] = {"confidence": max_confidence, "x": x, "y": y};
         }
-        //console.log(pose);
+        console.log(pose);
         //this.setState({pose: pose});
         requestAnimationFrame(loop);
       }
