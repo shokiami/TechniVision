@@ -50,16 +50,10 @@ export default class Posenet extends Component {
     var loop = async () => {
       const nextImageTensor = images.next().value;
       if (this.mounted) {
-        //Apply posenet to nextImageTensor
-        let cameraFlip;
-        if (Platform.OS === 'ios') {
-          cameraFlip = false;
-        } else {
-          cameraFlip = true;
-        }
+        //Convert nextImageTensor into data processible by tensorflow
         var data = tf.div(tf.stack([nextImageTensor.slice([0,0,0],[160,160,1]),nextImageTensor.slice([0,0,1],[160,160,1]),nextImageTensor.slice([0,0,2],[160,160,1])]).squeeze().expandDims().asType('float32'),255.0);
-        //console.log(data);
         let pose = model.predict(data);
+        console.log(pose);
         
         //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
         //this.setState({pose: pose});
