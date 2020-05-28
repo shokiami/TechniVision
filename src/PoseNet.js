@@ -29,10 +29,9 @@ export default class Posenet extends Component {
     //Load TensorFlow and PoseNet
     await tf.ready();
     TensorCamera = cameraWithTensors(Camera);
-    console.log("begining to load model");
+    console.log("Begining to load model");
     model = await tf.loadGraphModel(bundleResourceIO(require('./openpose/structure.json'), require('./openpose/weights.bin')));
-    console.log("finnished loading model");
-    console.log(model);
+    console.log("Finished loading model");
     // model = await posenet.load({
     //   architecture: 'MobileNetV1',
     //   outputStride: 16,
@@ -58,8 +57,8 @@ export default class Posenet extends Component {
         } else {
           cameraFlip = true;
         }
-        var data = tf.stack([nextImageTensor.slice([0,0,0],[16,16,1]), nextImageTensor.slice([0,0,1],[16,16,1]), nextImageTensor.slice([0,0,2],[16,16,1])]);
-        data = data.squeeze().expandDims().asType('float32') / 255.0;
+        var data = tf.div(tf.stack([nextImageTensor.slice([0,0,0],[16,16,1]), nextImageTensor.slice([0,0,1],[16,16,1]), nextImageTensor.slice([0,0,2],[16,16,1])]).squeeze().expandDims().asType('float32'),255.0);
+        console.log(data);
         let pose = model.predict(data);
         
         //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
