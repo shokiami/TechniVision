@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-react-native';
 import {Camera} from 'expo-camera';
-import {cameraWithTensors} from '@tensorflow/tfjs-react-native';
+import {cameraWithTensors, bundleResourceIO} from '@tensorflow/tfjs-react-native';
 import * as posenet from '@tensorflow-models/posenet';
 import Skeleton from './Skeleton';
 import styles from './Styles';
@@ -29,12 +29,16 @@ export default class Posenet extends Component {
     //Load TensorFlow and PoseNet
     await tf.ready();
     TensorCamera = cameraWithTensors(Camera);
-    model = await posenet.load({
-      architecture: 'MobileNetV1',
-      outputStride: 16,
-      inputResolution: {width: 320, height: 568},
-      multiplier: 0.5
-    });
+    console.log("begining to load model");
+    model = await tf.loadGraphModel(bundleResourceIO(require('./openpose/model.json'), require('./openpose/group1-shard1of1.bin')));
+    console.log("finnished loading model");
+    console.log(model);
+    // model = await posenet.load({
+    //   architecture: 'MobileNetV1',
+    //   outputStride: 16,
+    //   inputResolution: {width: 320, height: 568},
+    //   multiplier: 0.5
+    // });
     this.setState({loaded: true});
   }
   
@@ -45,7 +49,7 @@ export default class Posenet extends Component {
   
   handleCameraStream(images) {
     var loop = async () => {
-      const nextImageTensor = images.next().value; 
+      const nextImageTensor = images.next().value;
       if (this.mounted) {
         //Apply posenet to nextImageTensor
         let cameraFlip;
@@ -54,7 +58,12 @@ export default class Posenet extends Component {
         } else {
           cameraFlip = true;
         }
-        let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
+        const prediction = model.predict(nextImageTensor);
+        console.log(prediction);
+        
+        
+        
+        //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
         this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
       }
