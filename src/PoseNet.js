@@ -58,7 +58,9 @@ export default class Posenet extends Component {
         } else {
           cameraFlip = true;
         }
-        let pose = model.predict(nextImageTensor);
+        const data = tf.stack([nextImageTensor.slice([0,0,0],[160,160,1]), nextImageTensor.slice([0,0,1],[160,160,1]), nextImageTensor.slice([0,0,2],[160,160,1])])
+        let pose = model.predict(data.squeeze().expandDims(), [1, 3, 160, 160]);
+        
         //let pose = await model.estimateSinglePose(nextImageTensor, {flipHorizontal: cameraFlip});
         //this.setState({pose: pose});
         requestAnimationFrame(loop); //.bind(this);
