@@ -94,8 +94,8 @@ export default class Posenet extends Component {
             type={this.state.type}
             cameraTextureHeight={textureDims.height}
             cameraTextureWidth={textureDims.width}
-            resizeHeight={152}
-            resizeWidth={152}
+            resizeHeight={160}
+            resizeWidth={160}
             resizeDepth={3}
             onReady={this.handleCameraStream}
             autorender={true}
