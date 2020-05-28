@@ -30,7 +30,7 @@ export default class Posenet extends Component {
     await tf.ready();
     TensorCamera = cameraWithTensors(Camera);
     console.log("begining to load model");
-    model = await tf.loadGraphModel(bundleResourceIO(require('./openpose/model.json'), require('./openpose/group1-shard1of1.bin')));
+    model = await tf.loadGraphModel(bundleResourceIO(require('./openpose/structure.json'), require('./openpose/weights.bin')));
     console.log("finnished loading model");
     console.log(model);
     // model = await posenet.load({
