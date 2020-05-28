@@ -58,22 +58,25 @@ export default class Posenet extends Component {
         ];
         var pose = {}
         for (let keypoint = 0; keypoint < 24; keypoint ++) {
-          var layer = await output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze().array();
+          var layer = output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze(); //.array();
           //console.log(layer);
           //continue;
           var max_confidence = 0;
           var x = 0;
           var y = 0;
-          for (let i = 0; x < xsize/8; x ++) {
-            for (let j = 0; y < ysize/8; y ++) {
-              //console.log(layer.get(i,j) + "," + max_confidence );
-              if (layer[i][j] > max_confidence) {
-                x = i;
-                y = j;
-                max_confidence = layer[i][j];
-              }
-            }
-          }
+          console.log(layer);
+          console.log(await layer.array());
+
+          // for (let i = 0; x < xsize/8; x ++) {
+          //   for (let j = 0; y < ysize/8; y ++) {
+          //     //console.log(layer.get(i,j) + "," + max_confidence );
+          //     if (layer[i][j] > max_confidence) {
+          //       x = i;
+          //       y = j;
+          //       max_confidence = layer[i][j];
+          //     }
+          //   }
+          // }
           pose[names[keypoint]] = {"confidence": max_confidence, "x": x, "y": y};
         }
         console.log(pose);
