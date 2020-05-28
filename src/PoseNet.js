@@ -46,7 +46,7 @@ export default class Posenet extends Component {
         //Get tensor for current frame
         const nextImageTensor = images.next().value;
         //Convert nextImageTensor into shape required by openpose
-        var data = tf.div(tf.stack([nextImageTensor.slice([0,0,0],[xsize,ysize,1]),nextImageTensor.slice([0,0,1],[xsize,ysize,1]),nextImageTensor.slice([0,0,2],[xsize,ysize,1])]).squeeze().expandDims().asType('float32'),255.0);
+        var data = tf.div(tf.stack([nextImageTensor.slice([0,0,2],[xsize,ysize,1]),nextImageTensor.slice([0,0,1],[xsize,ysize,1]),nextImageTensor.slice([0,0,0],[xsize,ysize,1])]).squeeze().expandDims().asType('float32'),255.0);
         //Run openpose on data
         let output = model.predict(data);
         //Keypoint names
@@ -58,28 +58,25 @@ export default class Posenet extends Component {
         ];
         var pose = {}
         for (let keypoint = 0; keypoint < 24; keypoint ++) {
-          var layer = output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze(); //.array();
+          var layer = await output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze().array();
           //console.log(layer);
           //continue;
           var max_confidence = 0;
           var x = 0;
           var y = 0;
-          console.log(layer);
-          console.log(await layer.array());
-
-          // for (let i = 0; x < xsize/8; x ++) {
-          //   for (let j = 0; y < ysize/8; y ++) {
-          //     //console.log(layer.get(i,j) + "," + max_confidence );
-          //     if (layer[i][j] > max_confidence) {
-          //       x = i;
-          //       y = j;
-          //       max_confidence = layer[i][j];
-          //     }
-          //   }
-          // }
+          for (let i = 0; i < xsize/8; i ++) {
+            for (let j = 0; j < ysize/8; j ++) {
+              console.log(layer[i][j] + ", " + max_confidence );
+              if (layer[i][j] > max_confidence) {
+                x = i;
+                y = j;
+                max_confidence = layer[i][j];
+              }
+            }
+          }
           pose[names[keypoint]] = {"confidence": max_confidence, "x": x, "y": y};
         }
-        console.log(pose);
+        //console.log(pose);
         //this.setState({pose: pose});
         requestAnimationFrame(loop);
       }
