@@ -46,9 +46,12 @@ export default class Posenet extends Component {
         //Get tensor for current frame
         const nextImageTensor = images.next().value;
         //Convert nextImageTensor into shape required by openpose
-        var data = tf.div(tf.stack([nextImageTensor.slice([0,0,2],[xsize,ysize,1]),nextImageTensor.slice([0,0,1],[xsize,ysize,1]),nextImageTensor.slice([0,0,0],[xsize,ysize,1])]).squeeze().expandDims().asType('float32'),255.0);
+        const r = nextImageTensor.slice([0,0,0],[xsize,ysize,1]);
+        const g = nextImageTensor.slice([0,0,1],[xsize,ysize,1]);
+        const b = nextImageTensor.slice([0,0,2],[xsize,ysize,1]);
+        var data = tf.div(tf.stack([b,g,r]).squeeze().expandDims().asType('float32'), 255.0);
         //Run openpose on data
-        let output = model.predict(data);
+        const output = model.predict(data);
         //Keypoint names
         const names = [
           "nose", "neck", "left_shoulder", "left_elbow", "left_wrist", "right_shoulder", "right_elbow", "right_wrist",
@@ -56,7 +59,7 @@ export default class Posenet extends Component {
           "left_eye", "right_eye", "left_ear", "right_ear",
           "right_toe", "right_midfoot", "right_heel", "left_toe", "left_midfoot", "left_heel"
         ];
-        var pose = {}
+        var pose = {};
         for (let keypoint = 0; keypoint < names.length; keypoint ++) {
           var layer = await output.slice([0,keypoint,0,0], [1,1,xsize/8, ysize/8]).squeeze().array();
           var max_confidence = 0;
@@ -71,10 +74,10 @@ export default class Posenet extends Component {
               }
             }
           }
-          pose[names[keypoint]] = {"confidence": max_confidence, "x": x, "y": y};
+          pose[names[keypoint]] = {"confidence": max_confidence, "x": 5 * x, "y": 5 * y};
         }
         console.log(pose);
-        //this.setState({pose: pose});
+        this.setState({pose: pose});
         requestAnimationFrame(loop);
       }
     }

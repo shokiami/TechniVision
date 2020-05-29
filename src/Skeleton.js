@@ -5,45 +5,58 @@ import Svg, {Circle, Line} from 'react-native-svg';
 
 export default class Skeleton extends Component {
   drawSkeleton(pose) {
-    var minScore = 0.3;
+    var min_confidence = 0.;
     const point = (part) => {
-      if (pose.keypoints[part].score > minScore) {
+      if (pose[part].confidence > min_confidence) {
         return(
-          <Circle key={''+part} r='5' cx={pose.keypoints[part].position.x + '%'} cy={pose.keypoints[part].position.y + '%'} fill='blue'/>
+          <Circle key={part} r='5' cx={pose[part].x + '%'} cy={pose[part].y + '%'} fill='blue'/>
         );
       }
     }
     const line = (part1, part2) => {
-      if (pose.keypoints[part1].score > minScore && pose.keypoints[part2].score > minScore) {
+      if (pose[part1].confidence > min_confidence && pose[part2].confidence > min_confidence) {
         return(
-          <Line key={''+part1+part2} strokeWidth='5' x1={pose.keypoints[part1].position.x + '%'} y1={pose.keypoints[part1].position.y + '%'} x2={pose.keypoints[part2].position.x + '%'} y2={pose.keypoints[part2].position.y + '%'} stroke='blue'/>
+          <Line key={part1 + part2} strokeWidth='5' x1={pose[part1].x + '%'} y1={pose[part1].y + '%'} x2={pose[part2].x + '%'} y2={pose[part2].y + '%'} stroke='blue'/>
         );
       }
     }
     return ([
+
       //Face
-      point(0),
-      point(1),
-      point(2),
-      point(3),
-      point(4),
+      point("nose"),
+      point("left_eye"),
+      point("right_eye"),
+      point("left_ear"),
+      point("right_ear"),
       //Torso
-      line(5,6),
-      line(5,11),
-      line(6,12),
-      line(11,12),
+      line("neck", "left_shoulder"),
+      line("neck", "right_shoulder"),
+      line("left_shoulder", "left_waist"),
+      line("right_shoulder", "right_waist"),
+      line("left_waist", "center_waist"),
+      line("right_waist", "center_waist"),
       //Left arm
-      line(5,7),
-      line(7,9),
+      line("left_shoulder", "left_elbow"),
+      line("left_elbow", "left_wrist"),
       //Right arm
-      line(6,8),
-      line(8,10),
+      line("right_shoulder", "right_elbow"),
+      line("right_shoulder", "right_wrist"),
       //Left leg
-      line(11,13),
-      line(13,15),
+      line("left_waist", "left_knee"),
+      line("left_knee", "left_ankle"),
+      //Left foot
+      line("left_ankle", "left_toe"),
+      line("left_toe", "left_midfoot"),
+      line("left_midfoot", "left_heel"),
+      line("left_heel", "left_ankle"),
       //Right leg
-      line(12,14),
-      line(14,16),
+      line("right_waist", "right_knee"),
+      line("right_knee", "right_ankle"),
+      //Right foot
+      line("right_ankle", "right_toe"),
+      line("right_toe", "right_midfoot"),
+      line("right_midfoot", "right_heel"),
+      line("right_heel", "right_ankle"),
     ]);
   }
 
